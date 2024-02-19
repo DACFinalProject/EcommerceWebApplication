@@ -18,7 +18,7 @@ public class ProductDto {
 
 	private String categoryName;
 
-	private Integer price;
+	private double price;
 
 	private int sellerId;
 
