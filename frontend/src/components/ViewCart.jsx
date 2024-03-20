@@ -15,17 +15,19 @@ function ViewCart(){
         "zip":"",
         "country":""
     })
+
+    const totalAmount=state.cart.reduce((a,b)=> (a+b.price*b.qty),0)
     const [payment,setPayment]=useState({
         "cardNo":"",
         "nameOnCard":"",
         "cvv":"",
-        "amount":state.cart.reduce((a,b)=> (a+b.price),0)       
+        "amount":totalAmount       
     })
     const deleteItem=(item)=>{
         let resp=window.confirm('Are you sure to delete this item ?')
         if(resp){        
         dispatch({type:'RemoveItem',payload:item})   
-        let amount=state.cart.reduce((a,b)=> (a+b.price),0)
+        let amount=totalAmount
         console.log("Amount ",amount)
         }
     }
@@ -48,7 +50,7 @@ function ViewCart(){
     }
 
     useEffect(()=>{
-        let amount=state.cart.reduce((a,b)=> (a+b.price),0)
+        let amount=totalAmount
         setPayment({...payment,'amount':amount}) 
         console.log("Amount => ",amount)
     },[state.cart])
@@ -56,7 +58,7 @@ function ViewCart(){
     const handleSubmit=(e)=>{
         e.preventDefault()  
         //setSubmitted(true)
-        let amount=state.cart.reduce((a,b)=> (a+b.price),0)
+        let amount=totalAmount
         console.log("Amount ",payment.amount)
         setPayment({...payment,'amount':amount})
 
@@ -103,7 +105,7 @@ function ViewCart(){
                         <tr key={item.productId} className="text-center">
                             <td>{item.productId}</td>
                             <td>
-                                <img className="mr-2 float-left" src={"http://localhost:8080/"+item.photo} width="100" />
+                                <img className="mr-2 float-left" src={"http://localhost:8080/"+item.photo} width="100" alt="product"/>
                                 {item.pname}
                             </td>
                             <td>&#8377; {item.price}</td>
@@ -116,7 +118,7 @@ function ViewCart(){
                 <tfoot>
                     <tr>
                         <th colSpan="4">Total Amount</th>
-                        <th>&#8377; {state.cart.reduce((a,b)=> (a+b.price),0)}</th>
+                        <th>&#8377; {totalAmount}</th>
                     </tr>
                 </tfoot>
             </table>
